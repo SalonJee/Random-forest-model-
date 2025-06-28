@@ -17,7 +17,7 @@ Y = esto_data["Survived"]
 #changed string to numeric form 
 X['Sex']= X['Sex'].map({'M': 0 , 'F': 1})
 
-#it uses red_hot encoding method , to change the strings  to numeric data, to make it possible to train the model
+#it uses one_hot encoding method , to change the strings  to numeric data, to make it possible to train the model
 X = pd.get_dummies(X, columns=['Country', 'Category'])
 
 X['Age']= X['Age'].fillna(X['Age'].median())
@@ -45,11 +45,17 @@ print("\nClassification Report:\n", classification_rep)
 sample =  X_test.sample(n=1, random_state=None) #selects a random row ,random_state=None for different random rows each time
 prediction = rf_model.predict(sample)
 
+# Get the index of that sample
+sample_index = sample.index[0]
+
+# Get the actual survival status from Y_test
+actual = Y_test.loc[sample_index]
 
 
 sample_dict = sample.iloc[0].to_dict()
 print(f"\nSample Passenger: {sample_dict}")
 print(f"Predicted Survival: {'Survived' if prediction[0] == 1 else 'Did Not Survive'}")
+print(f"Actual Survival: {'Survived' if actual == 1 else 'Did Not Survive'}")
 
 
 
